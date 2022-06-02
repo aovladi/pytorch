@@ -81,6 +81,7 @@ def discover_tests(
         rc += extra_tests
     return sorted(rc)
 
+
 TESTS = discover_tests(
     blocklisted_patterns=[
         'ao',
@@ -384,13 +385,12 @@ def get_executable_command(options, allow_pytest, disable_coverage=False):
         executable = ["coverage", "run", "--parallel-mode", "--source=torch"]
     else:
         executable = [sys.executable]
-    if options.pytest:
-        if allow_pytest:
-            executable += ["-m", "pytest"]
-        else:
-            print_to_stderr(
-                "Pytest cannot be used for this test. Falling back to unittest."
-            )
+    if allow_pytest:
+        executable += ["-m", "pytest"]
+    else:
+        print_to_stderr(
+            "Pytest cannot be used for this test. Falling back to unittest."
+        )
     return executable
 
 
@@ -446,12 +446,12 @@ def test_cuda_primary_ctx(test_module, test_directory, options):
         test_module, test_directory, options, extra_unittest_args=["--subprocess"]
     )
 
+
 run_test_with_subprocess = functools.partial(run_test, extra_unittest_args=["--subprocess"])
 
 
 def get_run_test_with_subprocess_fn():
     return lambda test_module, test_directory, options: run_test_with_subprocess(test_module, test_directory, options)
-
 
 
 def _test_cpp_extensions_aot(test_directory, options, use_ninja):
@@ -617,6 +617,7 @@ CUSTOM_HANDLERS = {
     "distributed/rpc/test_share_memory": get_run_test_with_subprocess_fn(),
     "distributed/rpc/cuda/test_tensorpipe_agent": get_run_test_with_subprocess_fn(),
 }
+
 
 def parse_test_module(test):
     return test.split(".")[0]

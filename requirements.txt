@@ -10,3 +10,5 @@ setuptools
 six
 types-dataclasses
 typing_extensions
+pytest
+pytest-xdist
